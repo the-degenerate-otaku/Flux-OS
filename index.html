@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flux OS</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="script.js"></script>
+    <script src="app-factory.js"></script>
+    <script src="aesthetics.js"></script>
+  </head>
+  <body>
+    <div id="boot-screen">
+      <div id="boot-console"></div>
+    </div>
+
+    <div id="lock-screen" class="hidden">
+      <div class="lock-content">
+        <h1 id="lock-clock">00:00</h1>
+        <img src="icons/boot.png" alt="FluxOS" class="lock-logo" />
+        <button class="unlock-btn" onclick="unlockSystem()">
+          Enter Workspace
+        </button>
+      </div>
+    </div>
+    <div id="desktop"></div>
+    <div id="dock" class="dock"></div>
+
+    <div id="context-menu" class="hidden">
+      <div class="context-item" onclick="openWindow('window-settings')">
+        ⚙️ System Settings
+      </div>
+      <div class="context-item" onclick="createNewFile()">📄 New Text File</div>
+
+      <div class="context-divider"></div>
+      <div class="context-item" onclick="resetIcons()">🔄 Reset Icon Grid</div>
+    </div>
+
+    <div
+      id="window-terminal"
+      class="window hidden"
+      style="top: 50px; left: 50px; width: 450px"
+    >
+      <div
+        class="window-header"
+        onmousedown="dragWindow(event, 'window-terminal')"
+      >
+        <span>Flux Terminal</span>
+        <div class="window-controls">
+          <button
+            class="win-btn min-btn"
+            onclick="minimizeWindow('window-terminal')"
+          >
+            –
+          </button>
+          <button
+            class="win-btn max-btn"
+            onclick="toggleMaximize('window-terminal')"
+          >
+            □
+          </button>
+          <button
+            class="win-btn close-btn"
+            onclick="closeWindow('window-terminal')"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+      <div class="window-content">
+        <div id="term-output">
+          Flux Initialised : Loading Kernel<br />Type 'help' for available
+          commands.
+        </div>
+        <input
+          type="text"
+          id="term-input"
+          placeholder="flux:"
+          onkeydown="handleTerminal(event)"
+        />
+      </div>
+    </div>
+
+    <div id="window-nasa" class="window hidden" style="top: 150px; left: 200px">
+      <div class="window-header" onmousedown="dragWindow(event, 'window-nasa')">
+        <span>Satellite Feed</span>
+        <div class="window-controls">
+          <button
+            class="win-btn min-btn"
+            onclick="minimizeWindow('window-nasa')"
+          >
+            –
+          </button>
+          <button
+            class="win-btn max-btn"
+            onclick="toggleMaximize('window-nasa')"
+          >
+            □
+          </button>
+          <button
+            class="win-btn close-btn"
+            onclick="closeWindow('window-nasa')"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+      <div class="window-content" id="nasa-content">
+        <p style="color: var(--accent-color); font-family: monospace">
+          Awaiting telemetry data...
+        </p>
+      </div>
+    </div>
+
+    <div
+      id="window-pet"
+      class="window hidden"
+      style="top: 100px; left: 600px; width: 250px"
+    >
+      <div class="window-header" onmousedown="dragWindow(event, 'window-pet')">
+        <span>Desktop Pet</span>
+        <div class="window-controls">
+          <button
+            class="win-btn min-btn"
+            onclick="minimizeWindow('window-pet')"
+          >
+            –
+          </button>
+          <button
+            class="win-btn max-btn"
+            onclick="toggleMaximize('window-pet')"
+          >
+            □
+          </button>
+          <button class="win-btn close-btn" onclick="closeWindow('window-pet')">
+            ×
+          </button>
+        </div>
+      </div>
+      <div class="window-content" style="text-align: center; font-size: 40px">
+        <p>ʕ•ᴥ•ʔ</p>
+        <p style="font-size: 14px; margin-top: 10px">Idle...</p>
+      </div>
+    </div>
+
+    <div
+      id="window-settings"
+      class="window hidden"
+      style="top: 50px; left: 650px; width: 340px"
+    >
+      <div
+        class="window-header"
+        onmousedown="dragWindow(event, 'window-settings')"
+      >
+        <span>System Settings</span>
+        <div class="window-controls">
+          <button
+            class="win-btn min-btn"
+            onclick="minimizeWindow('window-settings')"
+          >
+            –
+          </button>
+          <button
+            class="win-btn max-btn"
+            onclick="toggleMaximize('window-settings')"
+          >
+            □
+          </button>
+          <button
+            class="win-btn close-btn"
+            onclick="closeWindow('window-settings')"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+      <div
+        class="window-content"
+        style="display: flex; flex-direction: column; gap: 5px"
+      >
+        <div class="control-group">
+          <label>ACCENT COLORS</label>
+          <div
+            class="theme-swatch"
+            title="Frost"
+            style="
+              background: linear-gradient(135deg, #88c0d0 50%, #2e3440 50%);
+            "
+            onclick="setTheme('nord')"
+          ></div>
+          <div
+            class="theme-swatch"
+            title="Neon"
+            style="
+              background: linear-gradient(135deg, #ff0055 50%, #0d0e15 50%);
+            "
+            onclick="setTheme('cyber')"
+          ></div>
+          <div
+            class="theme-swatch"
+            title="Pure"
+            style="
+              background: linear-gradient(135deg, #ffffff 50%, #1e1e1e 50%);
+            "
+            onclick="setTheme('mono')"
+          ></div>
+          <div
+            class="theme-swatch"
+            title="Glass"
+            style="
+              background: linear-gradient(135deg, #d99a5c 50%, #0a100e 50%);
+            "
+            onclick="setTheme('nova')"
+          ></div>
+        </div>
+
+        <div class="control-group">
+          <label>WINDOW TRANSPARENCY (OPACITY)</label>
+          <input
+            type="range"
+            id="opacity-slider"
+            min="0"
+            max="1"
+            step="0.05"
+            value="0.15"
+            oninput="handleOpacitySlider(this.value)"
+            style="width: 100%"
+          />
+        </div>
+        <div class="control-group">
+          <label>FROSTED GLASS BLUR</label>
+          <input
+            type="range"
+            id="blur-slider"
+            min="0"
+            max="40"
+            step="1"
+            value="15"
+            oninput="handleBlurSlider(this.value)"
+            style="width: 100%"
+          />
+        </div>
+
+        <div class="control-group">
+          <label>CURSOR EFFECTS</label>
+          <input type="checkbox" id="cursor-fx-toggle" checked />
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="window-addapp"
+      class="window hidden"
+      style="top: 250px; left: 450px; width: 320px"
+    >
+      <div
+        class="window-header"
+        onmousedown="dragWindow(event, 'window-addapp')"
+      >
+        <span>Add to Dock</span>
+        <div class="window-controls">
+          <button
+            class="win-btn min-btn"
+            onclick="minimizeWindow('window-addapp')"
+          >
+            –
+          </button>
+          <button
+            class="win-btn max-btn"
+            onclick="toggleMaximize('window-addapp')"
+          >
+            □
+          </button>
+          <button
+            class="win-btn close-btn"
+            onclick="closeWindow('window-addapp')"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+      <div
+        class="window-content"
+        style="display: flex; flex-direction: column; gap: 12px"
+      >
+        <input
+          type="text"
+          id="app-name"
+          placeholder="App Name (e.g. GitHub)"
+          style="
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            outline: none;
+          "
+        />
+        <input
+          type="text"
+          id="app-url"
+          placeholder="URL (e.g. github.com)"
+          style="
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            outline: none;
+          "
+        />
+        <button
+          class="theme-btn"
+          style="background: var(--accent-color); color: #000; margin-top: 5px"
+          onclick="handleAddApp()"
+        >
+          Pin Shortcut
+        </button>
+      </div>
+    </div>
+
+    <div id="launchpad" class="hidden">
+      <div class="lp-search-container">
+        <input
+          type="text"
+          id="lp-search"
+          placeholder="Search apps..."
+          onkeyup="filterLaunchpad()"
+        />
+      </div>
+      <div class="lp-grid">
+        <div
+          class="lp-icon"
+          onclick="
+            toggleLaunchpad();
+            openFileExplorer();
+          "
+        >
+          <image
+            src="icons/files.png"
+            style="width: 54px; height: 54px"
+          ></image>
+          <p>Files</p>
+        </div>
+        <div
+          class="lp-icon"
+          onclick="
+            toggleLaunchpad();
+            openNotepad();
+          "
+        >
+          <image
+            src="icons/notepad.png"
+            style="width: 54px; height: 54px"
+          ></image>
+          <p>Notepad</p>
+        </div>
+        <div
+          class="lp-icon"
+          onclick="
+            toggleLaunchpad();
+            openWindow('window-terminal');
+          "
+        >
+          <span>>_</span>
+          <p>Terminal</p>
+        </div>
+        <div
+          class="lp-icon"
+          onclick="
+            toggleLaunchpad();
+            openWindow('window-settings');
+          "
+        >
+          <image
+            src="icons/settings.png"
+            style="width: 54px; height: 54px"
+          ></image>
+          <p>Settings</p>
+        </div>
+        <div
+          class="lp-icon"
+          onclick="
+            toggleLaunchpad();
+            openWindow('window-nasa');
+          "
+        >
+          <image src="icons/nasa.png" style="width: 54px; height: 54px"></image>
+          <p>NASA</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="taskbar">
+      <div id="start-btn" onclick="toggleLaunchpad()">
+        <image src="icons/os.png" style="width: 44px; height: 44px"></image>
+      </div>
+      <div style="flex-grow: 1"></div>
+      <div id="clock">
+        <span id="clock-time">00:00</span>
+        <span id="clock-date">Saturday, August 22, 2026</span>
+      </div>
+    </div>
+
+    <script>
+      const bootMessages = [
+        "[0.000000] BOOT_ROM: Initiating UEFI secure boot chain...",
+        "[0.000012] EFI: Validating cryptographic signatures against root of trust [OK]",
+        "[0.000021] EFI: TPM 2.0 module detected. PCR banks locked.",
+        "[0.000045] GRUB: Unpacking compressed initramfs (zstd level 19)...",
+        "[0.000067] GRUB: Relocating kernel image to 0x100000...",
+        "[0.000102] CPU0: Initializing symmetric multi-threading. Spooling 128 virtual cores.",
+        "[0.000120] CPU0: Microcode patch level 0x09F applied.",
+        "[0.000155] MEM: Allocating contiguous memory blocks for hypervisor sandboxing.",
+        "[0.000180] MEM: Enabling NUMA node interleaving and TLB hugepages.",
+        "[0.000201] KERNEL: FluxOS Kernel v2.0.0 (x86_64_microservice_arch) initializing...",
+        "[0.000215] KERNEL: Bypassing legacy BIOS interrupts.",
+        "[0.000250] ACPI: Parsing ACPI tables and loading dynamic DSDT overrides.",
+        "[0.000275] PCI: Probing root complex and enumerating PCIe topologies.",
+        "[0.000340] VFS: Mounting virtual file system at 0xROOT...",
+        "[0.000345] VFS: Traversing B-tree inodes. Resolving symlink cascades.",
+        "[0.000360] VFS: OverlayFS engaged for immutable root directory.",
+        "[0.004112] SVC: Bootstrapping background microservices via Containerd daemon.",
+        "[0.004150] SVC: Orchestrating pod life-cycles via local Kubernetes node.",
+        "[0.004205] SVC: Starting notification service...",
+        "[0.004250] SVC: Registering push-subscription workers in service worker cache.",
+        "[0.004350] SVC: Subscribing to MQTT broker on port 1883 for push alerts.",
+        "[0.004400] AI: Loading localized Large Language Model heuristics into VRAM.",
+        "[0.004450] AI: Allocating tensor cores for matrix multiplication streams.",
+        "[0.004502] AI: Quantizing neural network weights to INT8 for real-time inference.",
+        "[0.004600] AI: Establishing zero-shot context window thresholds.",
+        "[0.005100] SYS: Firing 'dom-ready' and 'system-idle' lifecycle hooks.",
+        "[0.005200] SYS: Running immutable state reconciliation.",
+        "[0.005250] SYS: Parsing user-space YAML configurations.",
+        "[0.005310] API: Exposing local RESTful endpoints and GraphQL resolvers.",
+        "[0.006100] TELEMETRY: Syncing log buffers to persistent NVMe storage.",
+        "[0.006300] INIT: Spawning user-space shell and GUI environment...",
+      ];
+
+      function runBootSequence() {
+        const consoleEl = document.getElementById("boot-console");
+        const bootScreen = document.getElementById("boot-screen");
+        const lockScreen = document.getElementById("lock-screen");
+
+        let delay = 0;
+        bootMessages.forEach((msg, i) => {
+          setTimeout(() => {
+            consoleEl.innerHTML += msg + "<br>";
+            if (i === bootMessages.length - 1) {
+              setTimeout(() => {
+                lockScreen.classList.remove("hidden");
+                bootScreen.style.opacity = "0";
+                setTimeout(() => {
+                  bootScreen.style.display = "none";
+                  setInterval(() => {
+                    document.getElementById("lock-clock").innerText =
+                      new Date().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      });
+                  }, 1000);
+                }, 600);
+              }, 800);
+            }
+          }, delay);
+          delay += Math.random() * 300 + 200;
+        });
+      }
+
+      function unlockSystem() {
+        const lock = document.getElementById("lock-screen");
+        const content = lock.querySelector(".lock-content");
+        if (window.gsap) {
+          gsap.to(content, {
+            scale: 1.08,
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.in",
+          });
+          gsap.to(lock, {
+            opacity: 0,
+            duration: 0.7,
+            ease: "power2.inOut",
+            delay: 0.15,
+            onComplete: () => (lock.style.display = "none"),
+          });
+        } else {
+          lock.style.opacity = "0";
+          setTimeout(() => (lock.style.display = "none"), 800);
+        }
+      }
+
+      const windowsState = {};
+
+      function focusWindow(id) {
+        const win = document.getElementById(id);
+        if (!win) return;
+        if (typeof z !== "undefined") win.style.zIndex = ++z;
+        document
+          .querySelectorAll(".window")
+          .forEach((w) => w.classList.remove("focused"));
+        win.classList.add("focused");
+      }
+
+      function minimizeWindow(id) {
+        const win = document.getElementById(id);
+        if (window.gsap)
+          gsap.to(win, {
+            scale: 0.8,
+            opacity: 0,
+            y: 50,
+            duration: 0.3,
+            onComplete: () => win.classList.add("hidden"),
+          });
+        else win.classList.add("hidden");
+      }
+
+      function toggleMaximize(id) {
+        const win = document.getElementById(id);
+        if (!windowsState[id]) windowsState[id] = {};
+        const state = windowsState[id];
+
+        if (win.classList.contains("maximized")) {
+          win.classList.remove("maximized");
+          win.style.width = state.width;
+          win.style.height = state.height;
+          win.style.top = state.top;
+          win.style.left = state.left;
+        } else {
+          state.width = win.style.width;
+          state.height = win.style.height;
+          state.top = win.style.top;
+          state.left = win.style.left;
+          win.classList.add("maximized");
+          win.style.top = "0px";
+          win.style.left = "0px";
+          win.style.width = "100vw";
+          win.style.height = "calc(100vh - 50px)";
+        }
+      }
+
+      function dragWindow(e, id) {
+        const win = document.getElementById(id);
+        focusWindow(id);
+
+        if (win.classList.contains("maximized")) {
+          toggleMaximize(id);
+          win.style.left = e.clientX - parseInt(win.style.width) / 2 + "px";
+        }
+
+        let p3 = e.clientX,
+          p4 = e.clientY;
+        document.onmousemove = (e) => {
+          win.style.top = win.offsetTop - (p4 - e.clientY) + "px";
+          win.style.left = win.offsetLeft - (p3 - e.clientX) + "px";
+          p3 = e.clientX;
+          p4 = e.clientY;
+        };
+
+        document.onmouseup = (e) => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+          // Aero Snap Logic
+          if (e.clientX <= 10) {
+            windowsState[id] = {
+              width: win.style.width,
+              height: win.style.height,
+              top: win.style.top,
+              left: win.style.left,
+            };
+            win.style.top = "0px";
+            win.style.left = "0px";
+            win.style.width = "50vw";
+            win.style.height = "calc(100vh - 50px)";
+          } else if (e.clientX >= window.innerWidth - 10) {
+            windowsState[id] = {
+              width: win.style.width,
+              height: win.style.height,
+              top: win.style.top,
+              left: win.style.left,
+            };
+            win.style.top = "0px";
+            win.style.left = "50vw";
+            win.style.width = "50vw";
+            win.style.height = "calc(100vh - 50px)";
+          }
+        };
+      }
+
+      const VFS = {
+        fs: {},
+        init() {
+          const stored = localStorage.getItem("flux_vfs");
+          this.fs = stored
+            ? JSON.parse(stored)
+            : {
+                "welcome.txt":
+                  "Welcome to FluxOS!\nThis is a living, breathing virtual file system.\nEdit me and hit Save!",
+              };
+        },
+        save() {
+          localStorage.setItem("flux_vfs", JSON.stringify(this.fs));
+        },
+        read(filename) {
+          return this.fs[filename] || "";
+        },
+        write(filename, content) {
+          this.fs[filename] = content;
+          this.save();
+          if (document.getElementById("vfs-container")) renderFileExplorer();
+        },
+      };
+
+      function openNotepad(filename = "untitled.txt") {
+        const existing = document.getElementById("window-notepad");
+        if (existing) existing.remove();
+
+        const win = createApp({
+          id: "window-notepad",
+          title: `Notepad - ${filename}`,
+          icon: "📝",
+          width: 450,
+          height: 350,
+          content: (el) => {
+            el.style.padding = "0";
+            el.style.display = "flex";
+            el.style.flexDirection = "column";
+            el.style.height = "100%";
+            el.innerHTML = `<textarea id="np-content" style="flex:1; width:100%; background:rgba(0,0,0,0.3); border:none; color:white; padding:16px; font-family:monospace; font-size:14px; resize:none; outline:none;">${VFS.read(filename)}</textarea>`;
+            const textarea = el.querySelector("#np-content");
+            let saveTimer = null;
+            textarea.addEventListener("input", () => {
+              clearTimeout(saveTimer);
+              saveTimer = setTimeout(
+                () => VFS.write(win.dataset.currentFile, textarea.value),
+                800,
+              );
+            });
+          },
+        });
+        win.dataset.currentFile = filename;
+        openWindow("window-notepad");
+        attachNotepadRename();
+      }
+
+      function attachNotepadRename() {
+        const win = document.getElementById("window-notepad");
+        const titleSpan = win.querySelector(".window-header span");
+        titleSpan.ondblclick = () => {
+          const current = win.dataset.currentFile;
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = current;
+          input.style.cssText =
+            "font-size:14px; padding:2px 6px; border-radius:4px; border:1px solid var(--accent-color); background:rgba(0,0,0,0.4); color:#fff; width:150px;";
+          titleSpan.replaceWith(input);
+          input.focus();
+          input.select();
+          const commit = () => {
+            const newName = input.value.trim() || current;
+            if (newName !== current) {
+              VFS.fs[newName] = VFS.fs[current];
+              delete VFS.fs[current];
+              VFS.save();
+              win.dataset.currentFile = newName;
+              if (document.getElementById("vfs-container"))
+                renderFileExplorer();
+            }
+            const newSpan = document.createElement("span");
+            newSpan.textContent = `Notepad - ${win.dataset.currentFile}`;
+            input.replaceWith(newSpan);
+            attachNotepadRename();
+          };
+          input.onblur = commit;
+          input.onkeydown = (e) => {
+            if (e.key === "Enter") input.blur();
+          };
+        };
+      }
+
+      function openFileExplorer() {
+        createApp({
+          id: "window-files",
+          title: "File Explorer",
+          icon: "📁",
+          width: 450,
+          height: 300,
+          content: (el) => {
+            el.id = "vfs-container";
+            renderFileExplorer();
+          },
+        });
+        openWindow("window-files");
+      }
+
+      function renderFileExplorer() {
+        const container = document.getElementById("vfs-container");
+        if (!container) return;
+        let html = '<div style="display:flex; flex-wrap:wrap; gap:15px;">';
+        for (const [filename, content] of Object.entries(VFS.fs)) {
+          html += `
+            <div onclick="openNotepad('${filename}')" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; padding:10px; border-radius:8px; width:90px; text-align:center; transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:35px;">📄</span>
+              <span style="font-size:12px; margin-top:5px; word-break:break-all;">${filename}</span>
+            </div>`;
+        }
+        container.innerHTML = html + "</div>";
+      }
+
+      window.addEventListener("load", () => {
+        runBootSequence();
+        VFS.init();
+        if (typeof restoreSettings === "function") restoreSettings();
+        if (typeof initDock === "function") initDock();
+      });
+
+      function toggleLaunchpad() {
+        const lp = document.getElementById("launchpad");
+        if (lp.classList.contains("hidden")) {
+          lp.classList.remove("hidden");
+          document.getElementById("lp-search").focus();
+        } else {
+          lp.classList.add("hidden");
+        }
+      }
+
+      function filterLaunchpad() {
+        const query = document.getElementById("lp-search").value.toLowerCase();
+        document.querySelectorAll(".lp-icon").forEach((icon) => {
+          const name = icon.querySelector("p").innerText.toLowerCase();
+          icon.style.display = name.includes(query) ? "flex" : "none";
+        });
+      }
+
+      function createNewFile() {
+        document.getElementById("context-menu").classList.add("hidden");
+        const filename = prompt(
+          "Enter new file name (e.g., notes.txt):",
+          "untitled.txt",
+        );
+        if (filename) {
+          VFS.write(filename, "");
+          openNotepad(filename);
+        }
+      }
+
+      document.addEventListener("mousedown", (e) => {
+        const win = e.target.closest(".window");
+        if (win && !win.classList.contains("hidden")) focusWindow(win.id);
+      });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+
+    <script>
+      VANTA.GLOBE({
+        el: "#desktop",
+        mouseControls: true,
+        touchControls: true,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0xff8820,
+        color2: 0xff8820,
+        size: 1.0,
+        backgroundColor: 0x0e1016,
+      });
+    </script>
+  </body>
+</html>
