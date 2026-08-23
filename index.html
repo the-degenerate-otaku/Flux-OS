@@ -9,6 +9,7 @@
     <script src="script.js"></script>
     <script src="app-factory.js"></script>
     <script src="aesthetics.js"></script>
+    <script src="taskbar.js" defer></script>
   </head>
   <body>
     <div id="boot-screen">
@@ -396,10 +397,123 @@
       <div id="start-btn" onclick="toggleLaunchpad()">
         <image src="icons/os.png" style="width: 44px; height: 44px"></image>
       </div>
+      <div id="taskbar-minimized"></div>
       <div style="flex-grow: 1"></div>
-      <div id="clock">
-        <span id="clock-time">00:00</span>
-        <span id="clock-date">Saturday, August 22, 2026</span>
+      <div id="taskbar-widgets">
+        <div
+          id="tb-specs"
+          class="tb-item"
+          onclick="toggleWidgetPanel('specs')"
+          title="System specifications"
+        >
+          <span>Device Specs</span>
+        </div>
+        <div
+          id="tb-battery"
+          class="tb-item"
+          onclick="toggleWidgetPanel('battery')"
+        >
+          <span
+            id="battery-icon"
+            class="tb-symbol battery-icon"
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 24 24">
+              <rect
+                class="battery-shell"
+                x="2"
+                y="5"
+                width="18"
+                height="14"
+                rx="2"
+              />
+              <rect
+                id="battery-fill"
+                x="4"
+                y="7"
+                width="14"
+                height="10"
+                rx="1"
+              />
+              <path d="M21 9v6" />
+            </svg> </span
+          ><span id="battery-pct">100%</span>
+        </div>
+        <div
+          id="tb-wifi"
+          class="tb-item status-symbol"
+          title="Wi-Fi on"
+          aria-label="Wi-Fi on"
+        >
+          <svg
+            class="status-icon wifi-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M2.5 8.5a15.5 15.5 0 0 1 19 0M5.5 12a10.5 10.5 0 0 1 13 0M8.7 15.4a5.5 5.5 0 0 1 6.6 0M12 19h.01"
+            />
+          </svg>
+        </div>
+        <div
+          id="tb-bluetooth"
+          class="tb-item status-symbol"
+          title="Bluetooth on"
+          aria-label="Bluetooth on"
+        >
+          <svg
+            class="status-icon bluetooth-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="m7 7 10 10-5 5V2l5 5L7 17" />
+          </svg>
+        </div>
+
+        <div id="clock" onclick="toggleWidgetPanel('calendar')">
+          <span id="clock-time">00:00</span>
+          <span id="clock-date">Saturday, August 22, 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="widget-panel" class="hidden">
+      <div id="wp-calendar" class="wp-section hidden">
+        <div id="wp-cal-header">
+          <button onclick="calshiftMonth(-1)">‹</button>
+          <span id="wp-cal-title"></span>
+          <button onclick="calshiftMonth(1)">›</button>
+        </div>
+        <div id="wp-cal-grid"></div>
+      </div>
+      <div id="wp-specs" class="wp-section hidden">
+        <div class="widget-heading">Device Specs</div>
+        <div class="control-group">
+          <label>CPU Cores</label><span id="spec-cores"></span>
+        </div>
+        <div class="control-group">
+          <label>Memory (approx)</label><span id="spec-mem"></span>
+        </div>
+        <div class="control-group">
+          <label>Platform</label><span id="spec-platform"></span>
+        </div>
+        <div class="control-group">
+          <label>Screen</label><span id="spec-screen"></span>
+        </div>
+        <div class="control-group">
+          <label>GPU</label><span id="spec-gpu"></span>
+        </div>
+        <div class="control-group">
+          <label>Timezone</label><span id="spec-timezone"></span>
+        </div>
+      </div>
+      <div id="wp-battery" class="wp-section hidden">
+        <div class="control-group">
+          <label>Battery Level</label><span id="wp-battery-pct"></span>
+        </div>
+        <div class="control-group">
+          <label>Charging</label><span id="wp-battery-charging"></span>
+        </div>
       </div>
     </div>
 
@@ -505,6 +619,8 @@
 
       function minimizeWindow(id) {
         const win = document.getElementById(id);
+        if (!win) return;
+        win.classList.add("minimized");
         if (window.gsap)
           gsap.to(win, {
             scale: 0.8,
