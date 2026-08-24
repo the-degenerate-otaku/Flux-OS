@@ -67,7 +67,7 @@ function handleTerminal(e) {
         } else if (cmd === "clear") {
             output.innerHTML = "Terminal Cleared.";
         } else if (cmd === "version") {
-            output.innerHTML += "<br>Flux OS 2.0.0-Alpha";
+            output.innerHTML += "<br>Flux OS 2.0.1-Alpha";
         } else if (cmd === "reboot") {
             location.reload();
         } else {

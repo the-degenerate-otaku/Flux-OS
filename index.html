@@ -27,6 +27,7 @@
     </div>
     <div id="desktop"></div>
     <div id="dock" class="dock"></div>
+    <div id="wallpaper-shift"></div>
 
     <div id="context-menu" class="hidden">
       <div class="context-item" onclick="openWindow('window-settings')">
@@ -186,7 +187,7 @@
             class="theme-swatch"
             title="Frost"
             style="
-              background: linear-gradient(135deg, #88c0d0 50%, #2e3440 50%);
+              background: linear-gradient(135deg, #88c0d0 0 50%, #2e3440 50% 100%);
             "
             onclick="setTheme('nord')"
           ></div>
@@ -194,7 +195,7 @@
             class="theme-swatch"
             title="Neon"
             style="
-              background: linear-gradient(135deg, #ff0055 50%, #0d0e15 50%);
+              background: linear-gradient(135deg, #ff0055 0 50%, #0d0e15 50% 100%);
             "
             onclick="setTheme('cyber')"
           ></div>
@@ -202,7 +203,7 @@
             class="theme-swatch"
             title="Pure"
             style="
-              background: linear-gradient(135deg, #ffffff 50%, #1e1e1e 50%);
+              background: linear-gradient(135deg, #ffffff 0 50%, #1e1e1e 50% 100%);
             "
             onclick="setTheme('mono')"
           ></div>
@@ -210,7 +211,7 @@
             class="theme-swatch"
             title="Glass"
             style="
-              background: linear-gradient(135deg, #d99a5c 50%, #0a100e 50%);
+              background: linear-gradient(135deg, #d99a5c 0 50%, #0a100e 50% 100%);
             "
             onclick="setTheme('nova')"
           ></div>
@@ -226,8 +227,7 @@
             step="0.05"
             value="0.15"
             oninput="handleOpacitySlider(this.value)"
-            style="width: 100%"
-          />
+            style="width: 100%">
         </div>
         <div class="control-group">
           <label>FROSTED GLASS BLUR</label>
@@ -246,6 +246,58 @@
         <div class="control-group">
           <label>CURSOR EFFECTS</label>
           <input type="checkbox" id="cursor-fx-toggle" checked />
+        </div>
+
+        <div class="control-group">
+          <label>WALLPAPER TYPE</label>
+          <div class="wallpaper-mode-options" role="radiogroup" aria-label="Wallpaper type">
+            <label class="wallpaper-mode-option">
+              <input
+                type="radio"
+                name="wallpaper-type"
+                value="static"
+                onchange="handleWallpaperTypeChange(this.value)"
+                checked
+              />
+              <span>Static</span>
+            </label>
+            <label class="wallpaper-mode-option">
+              <input
+                type="radio"
+                name="wallpaper-type"
+                value="live"
+                onchange="handleWallpaperTypeChange(this.value)"
+              />
+              <span>Live</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="control-group" id="wallpaper-static-controls">
+          <label>UPLOAD WALLPAPER</label>
+          <input
+            type="file"
+            id="wallpaper-upload"
+            accept="image/*"
+            onchange="handleWallpaperUpload(event)"
+          />
+        </div>
+
+        <div class="control-group hidden" id="wallpaper-live-controls">
+          <label>LIVE WALLPAPER</label>
+          <div class="wallpaper-mode-options" role="radiogroup" aria-label="Live wallpaper">
+            <label class="wallpaper-mode-option">
+              <input
+                type="radio"
+                name="live-wallpaper"
+                value="globe"
+                onchange="setLiveWallpaper(this.value)"
+                checked
+              />
+              <span>Globe</span>
+            </label>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -870,20 +922,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 
-    <script>
-      VANTA.GLOBE({
-        el: "#desktop",
-        mouseControls: true,
-        touchControls: true,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0xff8820,
-        color2: 0xff8820,
-        size: 1.0,
-        backgroundColor: 0x0e1016,
-      });
+    <script src="wallpaper-shift.js">
     </script>
   </body>
 </html>
