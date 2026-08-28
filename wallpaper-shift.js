@@ -56,17 +56,17 @@ function setLiveWallpaper(type) {
     if (type === 'globe' && window.VANTA?.GLOBE) {
         vantaEffect = VANTA.GLOBE({
             el: "#wallpaper-shift",
-            mouseControls: false,
-            touchControls: false,
-            gyroControls: false,
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: true,
             minHeight: 200.0,
             minWidth: 200.0,
             scale: 1.0,
             scaleMobile: 1.0,
-            color: 0xff8820,
-            color2: 0xff8820,
+            color: 0xffffff,
+            color2: 0xffffff,
             size: 1.0,
-            backgroundColor: 0x0e1016,
+            backgroundColor: 0x111111,
         })
     }
 }

@@ -249,6 +249,18 @@
         </div>
 
         <div class="control-group">
+          <label>PET</label>
+          <label class="toggle-option">
+            <input
+              type="checkbox"
+              id="reptile-pet-toggle"
+              onchange="setReptilePetEnabled(this.checked)"
+            />
+            <span>Reptile Pet On</span>
+          </label>
+        </div>
+
+        <div class="control-group">
           <label>WALLPAPER TYPE</label>
           <div class="wallpaper-mode-options" role="radiogroup" aria-label="Wallpaper type">
             <label class="wallpaper-mode-option">
@@ -760,12 +772,20 @@
         fs: {},
         init() {
           const stored = localStorage.getItem("flux_vfs");
-          this.fs = stored
-            ? JSON.parse(stored)
-            : {
-                "welcome.txt":
-                  "Welcome to FluxOS!\nThis is a living, breathing virtual file system.\nEdit me and hit Save!",
-              };
+          try {
+            const parsed = stored ? JSON.parse(stored) : null;
+            this.fs = parsed && typeof parsed === "object" && !Array.isArray(parsed)
+              ? parsed
+              : {};
+          } catch (error) {
+            this.fs = {};
+          }
+
+          if (Object.keys(this.fs).length === 0) {
+            this.fs["welcome.txt"] =
+              "Welcome to FluxOS!\nThis is a living, breathing virtual file system.\nEdit me and hit Save!";
+            this.save();
+          }
         },
         save() {
           localStorage.setItem("flux_vfs", JSON.stringify(this.fs));
@@ -781,13 +801,11 @@
       };
 
       function openNotepad(filename = "untitled.txt") {
-        const existing = document.getElementById("window-notepad");
-        if (existing) existing.remove();
-
+        if (!VFS.fs || typeof VFS.fs !== "object") VFS.init();
         const win = createApp({
           id: "window-notepad",
           title: `Notepad - ${filename}`,
-          icon: "📝",
+          icon: "icons/notepad.png",
           width: 450,
           height: 350,
           content: (el) => {
@@ -848,10 +866,11 @@
       }
 
       function openFileExplorer() {
+        if (!VFS.fs || typeof VFS.fs !== "object") VFS.init();
         createApp({
           id: "window-files",
           title: "File Explorer",
-          icon: "📁",
+          icon: "icons/files.png",
           width: 450,
           height: 300,
           content: (el) => {
@@ -881,6 +900,10 @@
         VFS.init();
         if (typeof restoreSettings === "function") restoreSettings();
         if (typeof initDock === "function") initDock();
+        const reptileToggle = document.getElementById("reptile-pet-toggle");
+        if (reptileToggle) {
+          reptileToggle.checked = localStorage.getItem("flux_reptile_pet") !== "off";
+        }
       });
 
       function toggleLaunchpad() {
@@ -922,7 +945,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 
-    <script src="wallpaper-shift.js">
-    </script>
+    <script src="wallpaper-shift.js"></script>
+    <script src="reptile.js"></script>
   </body>
 </html>

@@ -82,7 +82,9 @@ function handleTerminal(e) {
 
 function openWindow(id) {
     const win = document.getElementById(id);
+    if (!win) return;
     win.classList.remove("hidden");
+    focusWindow(id);
     if (window.gsap) {
         gsap.fromTo(win, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "power2.out" });
     }

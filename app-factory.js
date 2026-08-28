@@ -5,6 +5,9 @@ function registerApp(id, config = {}) {
 }
 
 function createApp({ id, title, icon, width = 400, height = 200, x = 100, y = 100, content, onOpen, onClose }) {
+    const existing = document.getElementById(id);
+    if (existing) existing.remove();
+
     const win = document.createElement('div');
     win.id = id;
     win.className = 'window hidden';
@@ -53,13 +56,13 @@ function createApp({ id, title, icon, width = 400, height = 200, x = 100, y = 10
     return win;
 }
 
-registerApp('window-terminal', { title: 'Flux Terminal', icon: '>_' });
-registerApp('window-settings', { title: 'System Settings', icon: '⚙️' });
+registerApp('window-terminal', { title: 'Flux Terminal', icon: 'icons/terminal.png' });
+registerApp('window-settings', { title: 'System Settings', icon: 'icons/settings.png' });
 registerApp('window-addapp', { title: 'Add to Dock', icon: '➕' });
 
 registerApp('window-nasa', {
     title: 'Satellite Feed',
-    icon: '🚀',
+    icon: 'icons/nasa.png',
     onOpen: () => {
         fetchSpaceStationData();
         if (!nasaInterval) nasaInterval = setInterval(fetchSpaceStationData, 5000);

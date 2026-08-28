@@ -170,12 +170,38 @@ function renderMinimizedTaskbar() {
     if (!bar) return;
     bar.innerHTML = '';
     document.querySelectorAll('.window.minimized').forEach(win => {
+        const app = AppRegistry[win.id];
         const chip = document.createElement('div');
-        chip.className = 'tb-min-chip';
-        chip.textContent = AppRegistry[win.id]?.title || win.id;
-        chip.onclick = () => restoreWindow(win.id);
-        bar.appendChild(chip);
+        chip.className = 'tb-open-chip';
+        chip.title = app?.title || win.id;
 
+        if (app?.icon && app.icon.startsWith('icons/')) {
+            const img = document.createElement('img');
+            img.src = app.icon;
+            img.alt = app.title || win.id;
+            chip.appendChild(img);
+
+        }
+        else {
+            const span = document.createElement('span');
+            span.textContent = app?.icon || '❖';
+            chip.appendChild(span);
+        }
+
+        if (win.classList.contains('focused')) chip.classList.add('tb-open-active');
+
+        chip.onclick = () => {
+            if (win.classList.contains('minimized')) {
+                restoreWindow(win.id);
+            }
+            else if (win.classList.contains('hidden')) {
+                openWindow(win.id);
+            }
+            else {
+                focusWindow(win.id);
+            }
+        };
+        bar.appendChild(chip);
     });
 }
 
