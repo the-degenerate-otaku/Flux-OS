@@ -14,6 +14,7 @@ function createApp({ id, title, icon, width = 400, height = 200, x = 100, y = 10
     win.style.top = `${y}px`;
     win.style.left = `${x}px`;
     win.style.width = `${width}px`;
+    win.style.zIndex = typeof z !== "undefined" ? ++z : 10;
 
     const header = document.createElement('div');
     header.className = 'window-header';
@@ -44,10 +45,10 @@ function createApp({ id, title, icon, width = 400, height = 200, x = 100, y = 10
     header.append(titleSpan, controls);
 
     const contentEl = document.createElement('div');
-    contentEl.classname = 'window-content';
+    contentEl.className = 'window-content';
 
     win.append(header, contentEl);
-    document.getElementById('desktop').appendChild(win);
+    document.body.appendChild(win);
 
     if (typeof content === 'function') content(contentEl);
 
