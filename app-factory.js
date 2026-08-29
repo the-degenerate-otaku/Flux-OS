@@ -44,8 +44,7 @@ function createApp({ id, title, icon, width = 400, height = 200, x = 100, y = 10
     header.append(titleSpan, controls);
 
     const contentEl = document.createElement('div');
-    contentEl.className = 'window-content';
-    contentEl.style.minHeight = `${height}px`;
+    contentEl.classname = 'window-content';
 
     win.append(header, contentEl);
     document.getElementById('desktop').appendChild(win);

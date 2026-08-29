@@ -15,9 +15,10 @@ for (var i = 0; i < 230; i++) {
 
 }
 
-document.addEventListener("keydown", function (event) {
-    Input.keys[event.keyCode] = true;
-});
+if (false) {
+    var canvas = document.createElement("canvas");
+    document.body.appendChild(canvas);
+}
 
 document.addEventListener("keyup", function (event) {
     Input.keys[event.keyCode] = false;

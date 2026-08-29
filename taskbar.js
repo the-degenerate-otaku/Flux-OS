@@ -169,7 +169,7 @@ function renderMinimizedTaskbar() {
     const bar = document.getElementById('taskbar-minimized');
     if (!bar) return;
     bar.innerHTML = '';
-    document.querySelectorAll('.window.minimized').forEach(win => {
+    document.querySelectorAll('.window:not(.hidden), .window.minimized').forEach(win => {
         const app = AppRegistry[win.id];
         const chip = document.createElement('div');
         chip.className = 'tb-open-chip';
@@ -193,10 +193,17 @@ function renderMinimizedTaskbar() {
         chip.onclick = () => {
             if (win.classList.contains('minimized')) {
                 restoreWindow(win.id);
+
             }
+
             else if (win.classList.contains('hidden')) {
                 openWindow(win.id);
             }
+
+            else if (win.classList.contains('focused')) {
+                minimizeWindow(win.id);
+            }
+
             else {
                 focusWindow(win.id);
             }

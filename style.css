@@ -140,7 +140,8 @@ body {
 
 .window-content {
   padding: 20px;
-  min-height: 200px;
+  flex : 1 1  auto;
+  overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -492,6 +493,7 @@ body {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
   display: flex;
   gap: 12px;
   padding: 10px 15px;
@@ -502,6 +504,21 @@ body {
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   z-index: 9990;
+}
+
+.dock.dock-hidden {
+  transform: translateX(-50%) translateY(140%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#dock-trigger {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  z-index: 9989;
 }
 
 .dock-item {
@@ -848,7 +865,6 @@ body {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
-.window.maximized { border-radius: 0; }
 .window-controls { display: flex; gap: 8px; }
 .win-btn {
     width: 14px; height: 14px; border-radius: 50%; border: none; cursor: pointer;

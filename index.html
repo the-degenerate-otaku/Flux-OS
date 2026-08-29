@@ -10,6 +10,7 @@
     <script src="app-factory.js"></script>
     <script src="aesthetics.js"></script>
     <script src="taskbar.js" defer></script>
+    <script src="dock-autohide.js" defr></script>
   </head>
   <body>
     <div id="boot-screen">
@@ -27,6 +28,7 @@
     </div>
     <div id="desktop"></div>
     <div id="dock" class="dock"></div>
+    <div id="dock-trigger"></div>
     <div id="wallpaper-shift"></div>
 
     <div id="context-menu" class="hidden">
@@ -696,32 +698,71 @@
         else win.classList.add("hidden");
       }
 
-      function toggleMaximize(id) {
-        const win = document.getElementById(id);
-        if (!windowsState[id]) windowsState[id] = {};
-        const state = windowsState[id];
+   function toggleMaximize(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
+    if (!windowsState[id]) windowsState[id] = {};
+    const state = windowsState[id];
 
-        if (win.classList.contains("maximized")) {
-          win.classList.remove("maximized");
-          win.style.width = state.width;
-          win.style.height = state.height;
-          win.style.top = state.top;
-          win.style.left = state.left;
+    if (win.classList.contains("maximized")) {
+        win.classList.remove("maximized");
+        const target = {
+            top: state.top || win.offsetTop,
+            left: state.left || win.offsetLeft,
+            width: state.width || win.offsetWidth,
+            height: state.height || win.offsetHeight,
+        };
+        if (window.gsap) {
+            gsap.to(win, { ...target, duration: 0.28, ease: "power3.inOut" });
         } else {
-          state.width = win.style.width;
-          state.height = win.style.height;
-          state.top = win.style.top;
-          state.left = win.style.left;
-          win.classList.add("maximized");
-          win.style.top = "0px";
-          win.style.left = "0px";
-          win.style.width = "100vw";
-          win.style.height = "calc(100vh - 50px)";
+            win.style.top = `${parseFloat(target.top)}px`;
+            win.style.left = `${parseFloat(target.left)}px`;
+            win.style.width = `${parseFloat(target.width)}px`;
+            win.style.height = `${parseFloat(target.height)}px`;
         }
-      }
+        return;
+    }
+
+    state.width = win.style.width || `${win.getBoundingClientRect().width}px`;
+    state.height = win.style.height || `${win.getBoundingClientRect().height}px`;
+    state.top = win.style.top || `${win.offsetTop}px`;
+    state.left = win.style.left || `${win.offsetLeft}px`;
+
+    const taskbar = document.getElementById("taskbar");
+    const margin = 18;
+    const taskbarHeight = taskbar ? taskbar.offsetHeight : 50;
+
+    const targetTop = taskbarHeight + margin;
+    const targetLeft = margin;
+    const targetWidth = window.innerWidth - margin * 2;
+    const targetHeight = window.innerHeight - (taskbarHeight + margin * 2);
+
+    win.classList.add("maximized");
+    if (window.gsap) {
+        gsap.to(win, {
+            top: targetTop,
+            left: targetLeft,
+            width: targetWidth,
+            height: targetHeight,
+            duration: 0.28,
+            ease: "power3.inOut"
+        });
+    } else {
+        win.style.top = `${targetTop}px`;
+        win.style.left = `${targetLeft}px`;
+        win.style.width = `${targetWidth}px`;
+        win.style.height = `${targetHeight}px`;
+    }
+}
 
       function dragWindow(e, id) {
         const win = document.getElementById(id);
+        if (!win) return;
+
+        if (e.target.closest('.win-btn')) {
+          return;
+        }
+
         focusWindow(id);
 
         if (win.classList.contains("maximized")) {
