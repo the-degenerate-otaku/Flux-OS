@@ -53,32 +53,58 @@ function handleTerminal(e) {
     if (e.key === "Enter") {
         const input = document.getElementById("term-input");
         const output = document.getElementById("term-output");
+        const line = input.closest(".term-line");
 
         const fullCmd = input.value.trim();
         const args = fullCmd.split(' ');
         const cmd = args[0].toLowerCase();
 
-        output.innerHTML += `<br>admin@Flux:~$ ${fullCmd}`;
-
+        let response = ""
         if (cmd === "help") {
-            output.innerHTML += "<br>Commands: time, clear, version, reboot,";
+            response = "Commands: time, clear, version, reboot";
         } else if (cmd === "time") {
-            output.innerHTML += `<br>${new Date().toLocaleTimeString()}`;
+            response = new Date().toLocaleDateString();
+
         } else if (cmd === "clear") {
-            output.innerHTML = "Terminal Cleared.";
+            output.innerHTML = "";
+            appendTerminalLine(output);
+            return;
         } else if (cmd === "version") {
-            output.innerHTML += "<br>Flux OS 2.0.1-Alpha";
+            response = "FluxOS 2.0.1 - alpha";
+
         } else if (cmd === "reboot") {
             location.reload();
+            return;
+        } else if (cmd === "") {
+            response = "";
+
         } else {
-            output.innerHTML += "<br>Command not found.";
+            response = "Command not found.";
         }
 
-        input.value = "";
-        output.scrollTop = output.scrollHeight;
+        const resolvedLine = document.createElement("div");
+        resolvedLine.textContent = `Flux: ${fullCmd}`;
+        line.replaceWith(resolvedLine);
+
+
+        if (response) {
+            const responseLine = document.createElement("div");
+            responseLine.textContent = response;
+            output.appendChild(responseLine);
+        }
+        appendTerminalLine(output);
+
     }
 }
 
+function appendTerminalLine(output) {
+    const newLine = document.createElement("div");
+    newLine.className = "term-line"
+    newLine.innerHTML = `<span>Flux: </span> <input type="text" id="term-input" onkeydown="handleTerminal(event)" autofocus />`;
+    output.appendChild(newLine);
+    output.scrollTop = output.scrollHeight;
+    newLine.querySelector("input").focus();
+}
 
 function openWindow(id) {
     const win = document.getElementById(id);

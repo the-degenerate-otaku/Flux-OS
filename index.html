@@ -72,20 +72,24 @@
           </button>
         </div>
       </div>
-      <div class="window-content">
+      <div
+        class="window-content"
+        style="display: flex; flex-direction: column; height: 100%"
+      >
         <div id="term-output">
-          Flux Initialised : Loading Kernel<br />Type 'help' for available
+          Flux Initialised : Loading Kernel<br />Type 'help' for available<br />
           commands.
+          <div class="term-line">
+            <span>Flux:</span>
+            <input
+              type="text"
+              id="term-input"
+              onkeydown="handleTerminal(event)"
+            />
+          </div>
         </div>
-        <input
-          type="text"
-          id="term-input"
-          placeholder="flux:"
-          onkeydown="handleTerminal(event)"
-        />
       </div>
     </div>
-
     <div id="window-nasa" class="window hidden" style="top: 150px; left: 200px">
       <div class="window-header" onmousedown="dragWindow(event, 'window-nasa')">
         <span>Satellite Feed</span>
@@ -189,7 +193,11 @@
             class="theme-swatch"
             title="Frost"
             style="
-              background: linear-gradient(135deg, #88c0d0 0 50%, #2e3440 50% 100%);
+              background: linear-gradient(
+                135deg,
+                #88c0d0 0 50%,
+                #2e3440 50% 100%
+              );
             "
             onclick="setTheme('nord')"
           ></div>
@@ -197,7 +205,11 @@
             class="theme-swatch"
             title="Neon"
             style="
-              background: linear-gradient(135deg, #ff0055 0 50%, #0d0e15 50% 100%);
+              background: linear-gradient(
+                135deg,
+                #ff0055 0 50%,
+                #0d0e15 50% 100%
+              );
             "
             onclick="setTheme('cyber')"
           ></div>
@@ -205,7 +217,11 @@
             class="theme-swatch"
             title="Pure"
             style="
-              background: linear-gradient(135deg, #ffffff 0 50%, #1e1e1e 50% 100%);
+              background: linear-gradient(
+                135deg,
+                #ffffff 0 50%,
+                #1e1e1e 50% 100%
+              );
             "
             onclick="setTheme('mono')"
           ></div>
@@ -213,7 +229,11 @@
             class="theme-swatch"
             title="Glass"
             style="
-              background: linear-gradient(135deg, #d99a5c 0 50%, #0a100e 50% 100%);
+              background: linear-gradient(
+                135deg,
+                #d99a5c 0 50%,
+                #0a100e 50% 100%
+              );
             "
             onclick="setTheme('nova')"
           ></div>
@@ -229,7 +249,8 @@
             step="0.05"
             value="0.15"
             oninput="handleOpacitySlider(this.value)"
-            style="width: 100%">
+            style="width: 100%"
+          />
         </div>
         <div class="control-group">
           <label>FROSTED GLASS BLUR</label>
@@ -264,7 +285,11 @@
 
         <div class="control-group">
           <label>WALLPAPER TYPE</label>
-          <div class="wallpaper-mode-options" role="radiogroup" aria-label="Wallpaper type">
+          <div
+            class="wallpaper-mode-options"
+            role="radiogroup"
+            aria-label="Wallpaper type"
+          >
             <label class="wallpaper-mode-option">
               <input
                 type="radio"
@@ -299,7 +324,11 @@
 
         <div class="control-group hidden" id="wallpaper-live-controls">
           <label>LIVE WALLPAPER</label>
-          <div class="wallpaper-mode-options" role="radiogroup" aria-label="Live wallpaper">
+          <div
+            class="wallpaper-mode-options"
+            role="radiogroup"
+            aria-label="Live wallpaper"
+          >
             <label class="wallpaper-mode-option">
               <input
                 type="radio"
@@ -311,7 +340,6 @@
               <span>Globe</span>
             </label>
           </div>
-        </div>
         </div>
       </div>
     </div>
@@ -502,13 +530,13 @@
                 rx="1"
               />
 
-              <rect 
-              class="battery-nub"
-              x = "21"
-              y = "9.5"
-              width = "2"
-              height = "5"
-              rx = "1"
+              <rect
+                class="battery-nub"
+                x="21"
+                y="9.5"
+                width="2"
+                height="5"
+                rx="1"
               />
               <path d="M21 9v6" />
             </svg> </span
@@ -707,68 +735,70 @@
         else win.classList.add("hidden");
       }
 
-   function toggleMaximize(id) {
-    const win = document.getElementById(id);
-    if (!win) return;
-    if (!windowsState[id]) windowsState[id] = {};
-    const state = windowsState[id];
+      function toggleMaximize(id) {
+        const win = document.getElementById(id);
+        if (!win) return;
+        if (!windowsState[id]) windowsState[id] = {};
+        const state = windowsState[id];
 
-    if (win.classList.contains("maximized")) {
-        win.classList.remove("maximized");
-        const target = {
+        if (win.classList.contains("maximized")) {
+          win.classList.remove("maximized");
+          const target = {
             top: state.top || win.offsetTop,
             left: state.left || win.offsetLeft,
             width: state.width || win.offsetWidth,
             height: state.height || win.offsetHeight,
-        };
-        if (window.gsap) {
+          };
+          if (window.gsap) {
             gsap.to(win, { ...target, duration: 0.28, ease: "power3.inOut" });
-        } else {
+          } else {
             win.style.top = `${parseFloat(target.top)}px`;
             win.style.left = `${parseFloat(target.left)}px`;
             win.style.width = `${parseFloat(target.width)}px`;
             win.style.height = `${parseFloat(target.height)}px`;
+          }
+          return;
         }
-        return;
-    }
 
-    state.width = win.style.width || `${win.getBoundingClientRect().width}px`;
-    state.height = win.style.height || `${win.getBoundingClientRect().height}px`;
-    state.top = win.style.top || `${win.offsetTop}px`;
-    state.left = win.style.left || `${win.offsetLeft}px`;
+        state.width =
+          win.style.width || `${win.getBoundingClientRect().width}px`;
+        state.height =
+          win.style.height || `${win.getBoundingClientRect().height}px`;
+        state.top = win.style.top || `${win.offsetTop}px`;
+        state.left = win.style.left || `${win.offsetLeft}px`;
 
-    const taskbar = document.getElementById("taskbar");
-    const margin = 18;
-    const taskbarHeight = taskbar ? taskbar.offsetHeight : 50;
+        const taskbar = document.getElementById("taskbar");
+        const margin = 18;
+        const taskbarHeight = taskbar ? taskbar.offsetHeight : 50;
 
-    const targetTop = taskbarHeight + margin;
-    const targetLeft = margin;
-    const targetWidth = window.innerWidth - margin * 2;
-    const targetHeight = window.innerHeight - (taskbarHeight + margin * 2);
+        const targetTop = taskbarHeight + margin;
+        const targetLeft = margin;
+        const targetWidth = window.innerWidth - margin * 2;
+        const targetHeight = window.innerHeight - (taskbarHeight + margin * 2);
 
-    win.classList.add("maximized");
-    if (window.gsap) {
-        gsap.to(win, {
+        win.classList.add("maximized");
+        if (window.gsap) {
+          gsap.to(win, {
             top: targetTop,
             left: targetLeft,
             width: targetWidth,
             height: targetHeight,
             duration: 0.28,
-            ease: "power3.inOut"
-        });
-    } else {
-        win.style.top = `${targetTop}px`;
-        win.style.left = `${targetLeft}px`;
-        win.style.width = `${targetWidth}px`;
-        win.style.height = `${targetHeight}px`;
-    }
-}
+            ease: "power3.inOut",
+          });
+        } else {
+          win.style.top = `${targetTop}px`;
+          win.style.left = `${targetLeft}px`;
+          win.style.width = `${targetWidth}px`;
+          win.style.height = `${targetHeight}px`;
+        }
+      }
 
       function dragWindow(e, id) {
         const win = document.getElementById(id);
         if (!win) return;
 
-        if (e.target.closest('.win-btn')) {
+        if (e.target.closest(".win-btn")) {
           return;
         }
 
@@ -824,9 +854,10 @@
           const stored = localStorage.getItem("flux_vfs");
           try {
             const parsed = stored ? JSON.parse(stored) : null;
-            this.fs = parsed && typeof parsed === "object" && !Array.isArray(parsed)
-              ? parsed
-              : {};
+            this.fs =
+              parsed && typeof parsed === "object" && !Array.isArray(parsed)
+                ? parsed
+                : {};
           } catch (error) {
             this.fs = {};
           }
@@ -952,7 +983,8 @@
         if (typeof initDock === "function") initDock();
         const reptileToggle = document.getElementById("reptile-pet-toggle");
         if (reptileToggle) {
-          reptileToggle.checked = localStorage.getItem("flux_reptile_pet") !== "off";
+          reptileToggle.checked =
+            localStorage.getItem("flux_reptile_pet") !== "off";
         }
       });
 
