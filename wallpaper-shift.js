@@ -49,10 +49,32 @@ function destroyLiveWallpaper() {
     const wallpaperContainer = document.getElementById('wallpaper-shift');
     if (wallpaperContainer) wallpaperContainer.innerHTML = '';
 }
+function hextoVantaNum(hex) {
+    return parseInt(hex.replace('#', ''), 16);
+}
+
+function getCurrentAccentColors() {
+    const styles = getComputedStyle(document.documentElement);
+    const accent = styles.getPropertyValue('--accent-color').trim() || '#ffffff';
+    const accent2 = styles.getPropertyValue('--accent2-color').trim() || '#ffffff';
+    const bg = styles.getPropertyValue('--bg-color').trim() || '#111111';
+    return { accent, accent2, bg };
+}
+
+function UpdateVantaTheme() {
+    if (!vantaEffect) return;
+    const { accent, accent2, bg } = getCurrentAccentColors();
+    vantaEffect.setOptions({
+        color: hextoVantaNum(accent),
+        color2: hextoVantaNum(accent2),
+        backgroundColor: hextoVantaNum(bg)
+    });
+}
 
 function setLiveWallpaper(type) {
     destroyLiveWallpaper();
     localStorage.setItem('flux_live_wallpaper', type);
+    const { accent, accent2, bg } = getCurrentAccentColors();
     if (type === 'globe' && window.VANTA?.GLOBE) {
         vantaEffect = VANTA.GLOBE({
             el: "#wallpaper-shift",
@@ -63,14 +85,13 @@ function setLiveWallpaper(type) {
             minWidth: 200.0,
             scale: 1.0,
             scaleMobile: 1.0,
-            color: 0xffffff,
-            color2: 0xffffff,
+            color: hextoVantaNum(accent),
+            color2: hextoVantaNum(accent2),
             size: 1.0,
-            backgroundColor: 0x111111,
+            backgroundColor: hextoVantaNum(bg),
         })
     }
 }
-
 function restoreWallpaperSettings() {
     const mode = localStorage.getItem('flux_wallpaper_mode') || 'static';
     const modeOption = document.querySelector(`input[name="wallpaper-type"][value="${mode}"]`);

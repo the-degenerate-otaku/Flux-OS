@@ -10,6 +10,9 @@ const systemThemes = {
         '--window-rgb': '59, 66, 82',
         '--taskbar-rgb': '36, 41, 51',
         '--accent-color': '#88c0d0',
+        '--accent-rgb': '136, 192, 208',
+        '--accent2-color': '#5e81ac',
+        '--accent2-rgb': '94, 129, 172',
         '--text-color': '#d8dee9'
     },
     cyber: {
@@ -17,6 +20,9 @@ const systemThemes = {
         '--window-rgb': '26, 28, 40',
         '--taskbar-rgb': '9, 10, 15',
         '--accent-color': '#ff0055',
+        '--accent-rgb': '255, 0, 85',
+        '--accent2-color': '#00eaff',
+        '--accent2-rgb': '0, 234, 255',
         '--text-color': '#d8dee9'
     },
     mono: {
@@ -24,6 +30,9 @@ const systemThemes = {
         '--window-rgb': '30, 30, 30',
         '--taskbar-rgb': '10, 10, 10',
         '--accent-color': '#ffffff',
+        '--accent-rgb': '255, 255, 255',
+        '--accent2-color': '#888888',
+        '--accent2-rgb': '136, 136, 136',
         '--text-color': '#e0e0e0'
     },
     nova: {
@@ -31,11 +40,78 @@ const systemThemes = {
         '--window-rgb': '255, 255, 255',
         '--taskbar-rgb': '255, 255, 255',
         '--accent-color': '#d99a5c',
+        '--accent-rgb': '217, 154, 92',
+        '--accent2-color': '#f3c98b',
+        '--accent2-rgb': '243, 201, 139',
         '--text-color': '#f3f1ea'
+    },
+    nebula: {
+        '--bg-color': '#150f2e',
+        '--window-rgb': '40, 32, 74',
+        '--taskbar-rgb': '20, 15, 40',
+        '--accent-color': '#a78bfa',
+        '--accent-rgb': '167, 139, 250',
+        '--accent2-color': '#f472b6',
+        '--accent2-rgb': '244, 114, 182',
+        '--text-color': '#ede9fe'
+    },
+    sakura: {
+        '--bg-color': '#2b1620',
+        '--window-rgb': '60, 32, 45',
+        '--taskbar-rgb': '30, 16, 22',
+        '--accent-color': '#f9a8d4',
+        '--accent-rgb': '249, 168, 212',
+        '--accent2-color': '#fecdd3',
+        '--accent2-rgb': '254, 205, 211',
+        '--text-color': '#fff1f5'
+    },
+    forest: {
+        '--bg-color': '#0f1f17',
+        '--window-rgb': '20, 45, 32',
+        '--taskbar-rgb': '10, 22, 16',
+        '--accent-color': '#34d399',
+        '--accent-rgb': '52, 211, 153',
+        '--accent2-color': '#a3e635',
+        '--accent2-rgb': '163, 230, 53',
+        '--text-color': '#ecfdf5'
+    },
+    ember: {
+        '--bg-color': '#1f120a',
+        '--window-rgb': '50, 28, 18',
+        '--taskbar-rgb': '25, 14, 9',
+        '--accent-color': '#fb923c',
+        '--accent-rgb': '251, 146, 60',
+        '--accent2-color': '#ef4444',
+        '--accent2-rgb': '239, 68, 68',
+        '--text-color': '#fff7ed'
+    },
+    arctic: {
+        '--bg-color': '#071a24',
+        '--window-rgb': '15, 40, 54',
+        '--taskbar-rgb': '8, 20, 27',
+        '--accent-color': '#7dd3fc',
+        '--accent-rgb': '125, 211, 252',
+        '--accent2-color': '#e0f2fe',
+        '--accent2-rgb': '224, 242, 254',
+        '--text-color': '#ecfeff'
+    },
+    violet: {
+        '--bg-color': '#150a24',
+        '--window-rgb': '34, 18, 54',
+        '--taskbar-rgb': '17, 9, 27',
+        '--accent-color': '#c084fc',
+        '--accent-rgb': '192, 132, 252',
+        '--accent2-color': '#6366f1',
+        '--accent2-rgb': '99, 102, 241',
+        '--text-color': '#f5f3ff'
     }
 };
 
-const themeDisplayNames = { nord: 'Frost', cyber: 'Neon', mono: 'Pure', nova: 'Glass' };
+const themeDisplayNames = {
+    nord: 'Frost', cyber: 'Neon', mono: 'Pure', nova: 'Glass',
+    nebula: 'Nebula', sakura: 'Sakura', forest: 'Forest',
+    ember: 'Ember', arctic: 'Arctic', violet: 'Violet'
+};
 
 function setTheme(themeName, silent = false) {
     if (systemThemes[themeName]) {
@@ -44,6 +120,7 @@ function setTheme(themeName, silent = false) {
             document.documentElement.style.setProperty(property, value);
         }
         localStorage.setItem('flux_theme', themeName);
+        if (typeof UpdateVantaTheme === 'function') UpdateVantaTheme();
     }
 }
 
