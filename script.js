@@ -121,6 +121,11 @@ function setTheme(themeName, silent = false) {
         }
         localStorage.setItem('flux_theme', themeName);
         if (typeof UpdateVantaTheme === 'function') UpdateVantaTheme();
+        if (window.FluxOS?.accent) {
+            const accent = FluxOS.accent.sync(`theme:${themeName}`);
+            FluxOS.emit('theme:change', { name: themeName, ...accent });
+
+        }
     }
 }
 

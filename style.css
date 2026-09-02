@@ -6,6 +6,9 @@
   --accent-rgb: 217, 154, 92;
   --accent2-color: #f3c98b;
   --accent2-rgb: 243, 201, 139;
+  --accent-bright: color-mix(in srgb, var(--accent-color) 72%, white);
+  --accent-muted: color-mix(in srgb, var(--accent-color) 28%, var(--bg-color));
+  --accent-glow: color-mix(in srgb, var(--accent-color) 45%, transparent);
   --text-color: #f3f1ea;
   --bg-opacity: 0.15;
   --glass-blur: 15px;
