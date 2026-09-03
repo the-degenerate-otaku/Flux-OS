@@ -20,7 +20,9 @@ function handleWallpaperTypeChange(mode) {
         const savedImg = localStorage.getItem('flux_wallpaper_data');
         if (savedImg) {
             document.body.style.backgroundImage = `url('${savedImg}')`;
-            FluxOS.wallpaperPalette.apply(savedImg);
+            if (localStorage.getItem('flux_accent_mode') === 'auto') {
+                FluxOS.wallpaperPalette.apply(savedImg);
+            }
         }
     }
 }
@@ -32,7 +34,9 @@ function handleWallpaperUpload(e) {
     reader.onload = (ev) => {
         const dataUrl = ev.target.result;
         document.body.style.backgroundImage = `url('${dataUrl}')`;
-        FluxOS.wallpaperPalette.apply(dataUrl);
+        if (localStorage.getItem('flux_accent_mode') === 'auto') {
+            FluxOS.wallpaperPalette.apply(dataUrl);
+        }
         try {
             localStorage.setItem('flux_wallpaper_data', dataUrl);
 
@@ -127,9 +131,8 @@ function setLiveWallpaper(type) {
                 candidate.src = source;
             });
 
-            
-            image.src = source;
-            await image.decode();
+
+
 
             const canvas = document.createElement('canvas');
             canvas.width = canvas.height = SIZE;
@@ -201,6 +204,47 @@ function setLiveWallpaper(type) {
 
     FluxOS.wallpaperPalette = Object.freeze({ apply });
 })();
+
+function handleAccentModeChange(mode) {
+    localStorage.setItem('flux_accent_mode', mode);
+
+
+    const option = document.querySelector(`input[name="accent-mode"][value="${mode}"]`
+    );
+
+    const presets = document.getElementById('accent-manual-controls');
+
+    if (option) option.checked = true;
+
+    if(presets) {
+        presets.classList.toggle(
+            'accent-presets-hidden',
+
+            mode === 'auto'
+        );
+    }
+
+    if(mode === 'auto'){
+        const wallpaper = localStorage.getItem('flux_wallpaper_data');
+
+        if(wallpaper) {
+            FluxOS.wallpaperPalette.apply(wallpaper);
+
+        }
+
+    }
+
+    FluxOS.emit('accent:mode', {mode});
+}
+
+function restoreAccentMode(){
+    const mode = localStorage.getItem('flux_accent_mode') || 'manual';
+
+    handleAccentModeChange(mode);
+
+}
+
+window.addEventListener('load', restoreAccentMode, { once:true});
 
 function restoreWallpaperSettings() {
     const mode = localStorage.getItem('flux_wallpaper_mode') || 'static';

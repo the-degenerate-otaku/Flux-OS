@@ -114,22 +114,32 @@ const themeDisplayNames = {
 };
 
 function setTheme(themeName, silent = false) {
-    if (systemThemes[themeName]) {
-        const themeData = systemThemes[themeName];
-        for (const [property, value] of Object.entries(themeData)) {
-            document.documentElement.style.setProperty(property, value);
-        }
-        localStorage.setItem('flux_theme', themeName);
-        if (typeof UpdateVantaTheme === 'function') UpdateVantaTheme();
-        if (window.FluxOS?.accent) {
-            const accent = FluxOS.accent.sync(`theme:${themeName}`);
-            FluxOS.emit('theme:change', { name: themeName, ...accent });
+    if (!systemThemes[themeName]) return;
 
-        }
+    const themeData = systemThemes[themeName];
+
+    for (const [property, value] of Object.entries(themeData)) {
+        document.documentElement.style.setProperty(property, value);
+    }
+
+    localStorage.setItem('flux_theme', themeName);
+
+    if (!silent && typeof handleAccentModeChange === 'function') {
+        handleAccentModeChange('manual');
+    }
+
+    if (typeof UpdateVantaTheme === 'function') {
+        UpdateVantaTheme();
+    }
+
+    if (window.FluxOS?.accent) {
+        const accent = FluxOS.accent.sync(`theme:${themeName}`);
+        FluxOS.emit('theme:change', {
+            name: themeName,
+            ...accent
+        });
     }
 }
-
-
 
 function handleTerminal(e) {
     if (e.key === "Enter") {

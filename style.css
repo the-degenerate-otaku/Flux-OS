@@ -587,6 +587,32 @@ body {
   border-color: rgba(255, 255, 255, 0.6);
 }
 
+.accent-preset-grid {
+  display:grid;
+  grid-template-columns: repeat(5,38px);
+  justify-content: space-between;
+  gap:8px;
+  max-height: 92px;
+  padding-top: 10px;
+  opacity:1;
+  transform: translateY(0);
+  overflow : hidden;
+  transition: max-height 180ms ease, padding 180ms ease, opacity 140ms ease, transform 180ms ease;
+
+}
+
+.accent-preset-grid .theme-swatch{
+  margin:0;
+}
+
+.accent-preset-grid.accent-presets-hidden {
+  max-height: 0;
+  padding-top: 0;
+  opacity: 0;
+  transform: translateY(-5px);
+  pointer-events:none;
+}
+
 .control-group {
   background: rgba(0, 0, 0, 0.2);
   padding: 10px;

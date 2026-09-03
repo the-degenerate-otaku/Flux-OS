@@ -11,6 +11,7 @@
     <script src="app-factory.js"></script>
     <script src="aesthetics.js"></script>
     <script src="taskbar.js" defer></script>
+    ,<script>src="finder.js defer"</script>
     <script src="dock-autohide.js" defer></script>
   </head>
   <body>
@@ -190,6 +191,29 @@
       >
         <div class="control-group">
           <label>ACCENT COLORS</label>
+
+          <div class="wallpaper-mode-options">
+           <label class="wallpaper-mode-option">
+            <input
+            type="radio"
+            name="accent-mode"
+            value="manual"
+            checked
+            onchange="handleAccentModeChange(this.value)"/>
+          Manual
+          </label>
+
+          <label class="wallpaper-mode-option">
+            <input
+            type="radio"
+            name="accent-mode"
+            value="auto"
+            onchange="handleAccentModeChange(this.value)"/>
+            Auto
+          </label>
+          </div>
+<div id="accent-manual-controls" class="accent-preset-grid">
+
           <div
             class="theme-swatch"
             title="Frost"
@@ -310,6 +334,7 @@
             "
             onclick="setTheme('violet')"
           ></div>
+        </div>
         </div>
 
         <div class="control-group">
@@ -564,6 +589,17 @@
       <div id="start-btn" onclick="toggleLaunchpad()">
         <image src="icons/os.png" style="width: 44px; height: 44px"></image>
       </div>
+      <div id="tb-finder">
+        <input
+        id="tb-finder-input"
+        type="search"
+        placeholder="What are we searching today?"
+        aria-label="What are we searching today?"
+        autocomplete="off"
+        />
+        <div id="tb-finder-results" role="listbox"></div>
+      </div>
+      
       <div id="taskbar-minimized"></div>
       <div style="flex-grow: 1"></div>
       <div id="taskbar-widgets">
