@@ -11,7 +11,7 @@
     <script src="app-factory.js"></script>
     <script src="aesthetics.js"></script>
     <script src="taskbar.js" defer></script>
-    ,<script>src="finder.js defer"</script>
+    <script src="web-search.js" defer></script>
     <script src="dock-autohide.js" defer></script>
   </head>
   <body>
@@ -193,148 +193,149 @@
           <label>ACCENT COLORS</label>
 
           <div class="wallpaper-mode-options">
-           <label class="wallpaper-mode-option">
-            <input
-            type="radio"
-            name="accent-mode"
-            value="manual"
-            checked
-            onchange="handleAccentModeChange(this.value)"/>
-          Manual
-          </label>
+            <label class="wallpaper-mode-option">
+              <input
+                type="radio"
+                name="accent-mode"
+                value="manual"
+                checked
+                onchange="handleAccentModeChange(this.value)"
+              />
+              Manual
+            </label>
 
-          <label class="wallpaper-mode-option">
-            <input
-            type="radio"
-            name="accent-mode"
-            value="auto"
-            onchange="handleAccentModeChange(this.value)"/>
-            Auto
-          </label>
+            <label class="wallpaper-mode-option">
+              <input
+                type="radio"
+                name="accent-mode"
+                value="auto"
+                onchange="handleAccentModeChange(this.value)"
+              />
+              Auto
+            </label>
           </div>
-<div id="accent-manual-controls" class="accent-preset-grid">
-
-          <div
-            class="theme-swatch"
-            title="Frost"
-            style="
-              background: linear-gradient(
-                135deg,
-                #88c0d0 0 50%,
-                #5e81ac 50% 100%
-              );
-            "
-            onclick="setTheme('nord')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Neon"
-            style="
-              background: linear-gradient(
-                135deg,
-                #ff0055 0 50%,
-                #00eaff 50% 100%
-              );
-            "
-            onclick="setTheme('cyber')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Pure"
-            style="
-              background: linear-gradient(
-                135deg,
-                #ffffff 0 50%,
-                #888888 50% 100%
-              );
-            "
-            onclick="setTheme('mono')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Glass"
-            style="
-              background: linear-gradient(
-                135deg,
-                #d99a5c 0 50%,
-                #f3c98b 50% 100%
-              );
-            "
-            onclick="setTheme('nova')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Nebula"
-            style="
-              background: linear-gradient(
-                135deg,
-                #a78bfa 0 50%,
-                #f472b6 50% 100%
-              );
-            "
-            onclick="setTheme('nebula')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Sakura"
-            style="
-              background: linear-gradient(
-                135deg,
-                #f9a8d4 0 50%,
-                #fecdd3 50% 100%
-              );
-            "
-            onclick="setTheme('sakura')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Forest"
-            style="
-              background: linear-gradient(
-                135deg,
-                #34d399 0 50%,
-                #a3e635 50% 100%
-              );
-            "
-            onclick="setTheme('forest')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Ember"
-            style="
-              background: linear-gradient(
-                135deg,
-                #fb923c 0 50%,
-                #ef4444 50% 100%
-              );
-            "
-            onclick="setTheme('ember')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Arctic"
-            style="
-              background: linear-gradient(
-                135deg,
-                #7dd3fc 0 50%,
-                #e0f2fe 50% 100%
-              );
-            "
-            onclick="setTheme('arctic')"
-          ></div>
-          <div
-            class="theme-swatch"
-            title="Violet"
-            style="
-              background: linear-gradient(
-                135deg,
-                #c084fc 0 50%,
-                #6366f1 50% 100%
-              );
-            "
-            onclick="setTheme('violet')"
-          ></div>
-        </div>
+          <div id="accent-manual-controls" class="accent-preset-grid">
+            <div
+              class="theme-swatch"
+              title="Frost"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #88c0d0 0 50%,
+                  #5e81ac 50% 100%
+                );
+              "
+              onclick="setTheme('nord')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Neon"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #ff0055 0 50%,
+                  #00eaff 50% 100%
+                );
+              "
+              onclick="setTheme('cyber')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Pure"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #ffffff 0 50%,
+                  #888888 50% 100%
+                );
+              "
+              onclick="setTheme('mono')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Glass"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #d99a5c 0 50%,
+                  #f3c98b 50% 100%
+                );
+              "
+              onclick="setTheme('nova')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Nebula"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #a78bfa 0 50%,
+                  #f472b6 50% 100%
+                );
+              "
+              onclick="setTheme('nebula')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Sakura"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #f9a8d4 0 50%,
+                  #fecdd3 50% 100%
+                );
+              "
+              onclick="setTheme('sakura')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Forest"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #34d399 0 50%,
+                  #a3e635 50% 100%
+                );
+              "
+              onclick="setTheme('forest')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Ember"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #fb923c 0 50%,
+                  #ef4444 50% 100%
+                );
+              "
+              onclick="setTheme('ember')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Arctic"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #7dd3fc 0 50%,
+                  #e0f2fe 50% 100%
+                );
+              "
+              onclick="setTheme('arctic')"
+            ></div>
+            <div
+              class="theme-swatch"
+              title="Violet"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  #c084fc 0 50%,
+                  #6366f1 50% 100%
+                );
+              "
+              onclick="setTheme('violet')"
+            ></div>
+          </div>
         </div>
 
         <div class="control-group">
@@ -589,17 +590,16 @@
       <div id="start-btn" onclick="toggleLaunchpad()">
         <image src="icons/os.png" style="width: 44px; height: 44px"></image>
       </div>
-      <div id="tb-finder">
+      <form id="tb-web-search" role="search">
+        <span id="tb-search-prompt" aria-hidden="true">Search the web</span>
         <input
-        id="tb-finder-input"
-        type="search"
-        placeholder="What are we searching today?"
-        aria-label="What are we searching today?"
-        autocomplete="off"
+          id="tb-search-input"
+          type="search"
+          aria-label="Search Google"
+          autocomplete="off"
         />
-        <div id="tb-finder-results" role="listbox"></div>
-      </div>
-      
+      </form>
+
       <div id="taskbar-minimized"></div>
       <div style="flex-grow: 1"></div>
       <div id="taskbar-widgets">

@@ -216,7 +216,7 @@ function handleAccentModeChange(mode) {
 
     if (option) option.checked = true;
 
-    if(presets) {
+    if (presets) {
         presets.classList.toggle(
             'accent-presets-hidden',
 
@@ -224,27 +224,47 @@ function handleAccentModeChange(mode) {
         );
     }
 
-    if(mode === 'auto'){
+    if (mode === 'auto') {
+        const root = document.documentElement;
+        const neutralSurface = {
+            '--bg-color': '#0b0d12',
+            '--window-rgb': '24, 26, 32',
+            '--taskbar-rgb': '15, 17, 22',
+            '--text-color': '#f4f6fb'
+        };
+
+        Object.entries(neutralSurface).forEach(([property, value]) => {
+            root.style.setProperty(property, value);
+        });
+
         const wallpaper = localStorage.getItem('flux_wallpaper_data');
 
-        if(wallpaper) {
+        if (wallpaper) {
             FluxOS.wallpaperPalette.apply(wallpaper);
-
         }
+    } else {
+        const theme = localStorage.getItem('flux_theme') || 'nova';
 
+        if (typeof setTheme === 'function') {
+            setTheme(theme, true);
+        }
     }
 
-    FluxOS.emit('accent:mode', {mode});
+
+
+
+
+    FluxOS.emit('accent:mode', { mode });
 }
 
-function restoreAccentMode(){
+function restoreAccentMode() {
     const mode = localStorage.getItem('flux_accent_mode') || 'manual';
 
     handleAccentModeChange(mode);
 
 }
 
-window.addEventListener('load', restoreAccentMode, { once:true});
+window.addEventListener('load', restoreAccentMode, { once: true });
 
 function restoreWallpaperSettings() {
     const mode = localStorage.getItem('flux_wallpaper_mode') || 'static';

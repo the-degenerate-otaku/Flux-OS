@@ -567,8 +567,8 @@ function setupLizard(size, legs, tail) {
         }
     }
 
-    var targetX = Input.mouse.x;
-    var targetY = Input.mouse.y;
+    var targetX = critter.x;
+    var targetY = critter.y;
     reptileAnimationTimer = setInterval(function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         targetX += (Input.mouse.x - targetX) * 0.18;
