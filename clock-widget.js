@@ -48,13 +48,31 @@
         const date = widget.querySelector('#fc-date');
 
 
-        if (saved.x != null && saved.y != null) {
-            widget.style.left = `${saved.x}px`;
-            widget.style.top = `${saved.y}px`;
-        } else {
-            widget.style.right = '60px';
-            widget.style.bottom = '80px';
+        function placeWidget() {
+            const maxX = Math.max(0, innerWidth - widget.offsetWidth);
+            const maxY = Math.max(
+                0,
+                innerHeight - 50 - widget.offsetHeight
+            );
+
+            const xRatio = Math.max(0, Math.min(
+                1,
+                saved.xRatio ?? 0.9
+            ));
+
+            const yRatio = Math.max(0, Math.min(
+                1,
+                saved.yRatio ?? 0.66
+            ));
+
+            widget.style.right = '';
+            widget.style.bottom = '';
+            widget.style.left = `${maxX * xRatio}px`;
+            widget.style.top = `${50 + maxY * yRatio}px`;
         }
+
+        requestAnimationFrame(placeWidget);
+        addEventListener('resize', placeWidget);
         widget.style.fontFamily = 'var(--display)';
 
         function update() {
@@ -107,8 +125,18 @@
 
             function stop() {
                 removeEventListener('pointermove', move);
-                saved.x = widget.offsetLeft;
-                saved.y = widget.offsetTop;
+
+                const maxX = Math.max(1, innerWidth - widget.offsetWidth);
+                const maxY = Math.max(
+                    1,
+                    innerHeight - 50 - widget.offsetHeight
+                );
+
+                saved.xRatio = widget.offsetLeft / maxX;
+                saved.yRatio = (widget.offsetTop - 50) / maxY;
+
+                delete saved.x;
+                delete saved.y;
                 store();
             }
 
