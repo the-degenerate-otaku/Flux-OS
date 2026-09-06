@@ -311,6 +311,13 @@ function initDock() {
             iconUrl: 'icons/notepad.png',
             isSystem: true,
             action: () => openNotepad()
+        },
+        {
+            id: 'sys-music',
+            name: 'Music Player',
+            iconUrl: 'icons/music.png',
+            isSystem: true,
+            action: () => openMusicPlayer()
         }
     ];
 
@@ -336,6 +343,16 @@ function renderDock() {
         item.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
+
+            if (typeof app.action === 'function') {
+                app.action();
+                return;
+            }
+
+            if (app.appId && window.FluxOS?.apps?.[app.appId]) {
+                FluxOS.apps[app.appId].open();
+                return;
+            }
 
             if (app.id === 'sys-terminal') {
                 openWindow('window-terminal');

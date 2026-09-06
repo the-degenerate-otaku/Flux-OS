@@ -1,4 +1,5 @@
 let vantaEffect = null;
+const DEFAULT_WALLPAPER = 'icons/wallpaper.jpg';
 
 function handleWallpaperTypeChange(mode) {
     localStorage.setItem('flux_wallpaper_mode', mode);
@@ -17,15 +18,14 @@ function handleWallpaperTypeChange(mode) {
 
     } else {
         destroyLiveWallpaper();
-        const savedImg = localStorage.getItem('flux_wallpaper_data');
-        if (savedImg) {
-            document.body.style.backgroundImage = `url('${savedImg}')`;
-            if (localStorage.getItem('flux_accent_mode') === 'auto') {
-                FluxOS.wallpaperPalette.apply(savedImg);
-            }
+        const savedImg = localStorage.getItem('flux_wallpaper_data') || DEFAULT_WALLPAPER;
+        document.body.style.backgroundImage = `url('${savedImg}')`;
+        if (localStorage.getItem('flux_accent_mode') === 'auto') {
+            FluxOS.wallpaperPalette.apply(savedImg);
         }
     }
 }
+
 
 function handleWallpaperUpload(e) {
     const file = e.target.files[0];
@@ -237,11 +237,9 @@ function handleAccentModeChange(mode) {
             root.style.setProperty(property, value);
         });
 
-        const wallpaper = localStorage.getItem('flux_wallpaper_data');
+        const wallpaper = localStorage.getItem('flux_wallpaper_data') || DEFAULT_WALLPAPER;
+        FluxOS.wallpaperPalette.apply(wallpaper);
 
-        if (wallpaper) {
-            FluxOS.wallpaperPalette.apply(wallpaper);
-        }
     } else {
         const theme = localStorage.getItem('flux_theme') || 'nova';
 
@@ -258,7 +256,7 @@ function handleAccentModeChange(mode) {
 }
 
 function restoreAccentMode() {
-    const mode = localStorage.getItem('flux_accent_mode') || 'manual';
+    const mode = localStorage.getItem('flux_accent_mode') || 'auto';
 
     handleAccentModeChange(mode);
 
