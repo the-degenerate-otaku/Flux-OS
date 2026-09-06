@@ -18,7 +18,7 @@
         style.textContent = `
      
                #flux-clock-widget{
-                position:fixed;left:30px;top:90px;z-index:4;
+                position:fixed;z-index:4;
                 color:var(--text-color);text-align:center;
                 cursor:grab;user-select:none;
                 text-shadow:0 3px 15px #000;
@@ -48,10 +48,14 @@
         const date = widget.querySelector('#fc-date');
 
 
-        widget.style.left = `${saved.x ?? 650}px`;
-        widget.style.top = `${saved.y ?? 357}px`;
+        if (saved.x != null && saved.y != null) {
+            widget.style.left = `${saved.x}px`;
+            widget.style.top = `${saved.y}px`;
+        } else {
+            widget.style.right = '60px';
+            widget.style.bottom = '80px';
+        }
         widget.style.fontFamily = 'var(--display)';
-        time.style.fontSize = `${saved.size || 64}px`;
 
         function update() {
             const now = new Date();
@@ -94,6 +98,8 @@
                 ));
 
 
+                widget.style.right = '';
+                widget.style.bottom = '';
                 widget.style.left = `${x}px`;
                 widget.style.top = `${y}px`;
 
