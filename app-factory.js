@@ -1,3 +1,5 @@
+// Thank god i built this
+
 const AppRegistry = {};
 
 function registerApp(id, config = {}) {

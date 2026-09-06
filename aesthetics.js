@@ -1,3 +1,5 @@
+// forogt why i made this
+
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 let cx = mouseX;

@@ -1,3 +1,5 @@
+//I couldnt figure this at all
+
 (() => {
     "use strict";
     const FluxOS = (window.FluxOS ||= {});

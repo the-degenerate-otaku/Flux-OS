@@ -1,3 +1,5 @@
+// peak ik
+
 let vantaEffect = null;
 const DEFAULT_WALLPAPER = 'icons/wallpaper.jpg';
 

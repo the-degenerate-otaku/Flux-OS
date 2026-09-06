@@ -1,3 +1,4 @@
+// Why is this so long istg
 let z = 10;
 let nasaInterval = null;
 let nasaConnected = null;

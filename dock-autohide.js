@@ -1,3 +1,5 @@
+// probably the one i have raged most
+
 function updateDockVisibility() {
     const dock = document.getElementById('dock');
     if (!dock) return;
