@@ -48,8 +48,8 @@
         const date = widget.querySelector('#fc-date');
 
 
-        widget.style.left = `${saved.x ?? 420}px`;
-        widget.style.top = `${saved.y ?? 260}px`;
+        widget.style.left = `${saved.x ?? 650}px`;
+        widget.style.top = `${saved.y ?? 357}px`;
         widget.style.fontFamily = 'var(--display)';
         time.style.fontSize = `${saved.size || 64}px`;
 

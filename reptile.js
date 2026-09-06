@@ -72,7 +72,7 @@ var ctx = canvas.getContext("2d");
 
 var segmentCount = 0;
 var reptileAnimationTimer = null;
-var reptilePetEnabled = localStorage.getItem("flux_reptile_pet") !== "off";
+var reptilePetEnabled = localStorage.getItem("flux_reptile_pet") === "on";
 var reptilePetConfig = null;
 class Segment {
     constructor(parent, size, angle, range, stiffness) {
